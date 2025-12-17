@@ -106,7 +106,7 @@ else
   BCRYPT_BUILD_ARGS="-DBUILD_SHARED_LIBS=On"
 fi
 
-git clone https://github.com/trusch/libbcrypt.git bcrypt
+git clone https://github.com/Zen0x7/libbcrypt.git bcrypt
 cd bcrypt
 mkdir build
 cd build
