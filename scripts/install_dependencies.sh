@@ -62,6 +62,7 @@ apk add --no-cache \
     php-sodium \
     php-xmlreader \
     mariadb-client \
+    libunwind \
     gnupg \
     binutils
 
@@ -76,6 +77,7 @@ if [ "$LINK" == "static" ]; then
       brotli-static \
       libidn2-static \
       libpsl-static \
+      libunwind-static \
       libunistring-static
 fi
 
