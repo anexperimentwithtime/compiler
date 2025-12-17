@@ -121,3 +121,56 @@ php -r "if (hash_file('sha384', 'composer-setup.php') === 'c8b085408188070d5f52b
 php composer-setup.php
 php -r "unlink('composer-setup.php');"
 mv composer.phar /usr/local/bin/composer
+
+if [ "$BOOST_VARIANT" == "release" ]; then
+  if [ "$LINK" == "static" ]; then
+    SPDLOG_BUILD_ARGS="-DCMAKE_BUILD_TYPE=Release -DSPDLOG_BUILD_SHARED=OFF"
+  else
+    BCRYPT_BUILD_ARGS="-DCMAKE_BUILD_TYPE=Release -DSPDLOG_BUILD_SHARED=ON"
+  fi
+else
+  if [ "$LINK" == "static" ]; then
+    SPDLOG_BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug -DSPDLOG_BUILD_SHARED=OFF"
+  else
+    BCRYPT_BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug -DSPDLOG_BUILD_SHARED=ON"
+  fi
+fi
+
+git clone https://github.com/gabime/spdlog.git spdlog
+cd spdlog
+git checkout tags/v1.16.0
+mkdir build
+cd build
+cmake .. $SPDLOG_BUILD_ARGS
+make -j4
+make install
+cd ../..
+rm spdlog -Rf
+
+if [ "$BOOST_VARIANT" == "release" ]; then
+  if [ "$LINK" == "static" ]; then
+    SENTRY_BUILD_ARGS="-DCMAKE_BUILD_TYPE=Release -DSENTRY_BUILD_SHARED_LIBS=OFF"
+  else
+    SENTRY_BUILD_ARGS="-DCMAKE_BUILD_TYPE=Release -DSENTRY_BUILD_SHARED_LIBS=ON"
+  fi
+else
+  if [ "$LINK" == "static" ]; then
+    SENTRY_BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug -DSENTRY_BUILD_SHARED_LIBS=OFF"
+  else
+    SENTRY_BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug -DSENTRY_BUILD_SHARED_LIBS=ON"
+  fi
+fi
+
+git clone https://github.com/getsentry/sentry-native.git sentry
+cd sentry
+git checkout tags/0.12.2
+git submodule update --init --recursive
+mkdir build
+cd build
+cmake .. $SENTRY_BUILD_ARGS -DSENTRY_BACKEND=crashpad -DSENTRY_BUILD_TESTS=OFF -DSENTRY_BUILD_EXAMPLES=OFF
+make -j4
+make install
+cd ../..
+rm sentry -Rf
+
+
