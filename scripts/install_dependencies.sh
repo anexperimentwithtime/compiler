@@ -62,7 +62,7 @@ apk add --no-cache \
     php-sodium \
     php-xmlreader \
     mariadb-client \
-    libunwind \
+    libunwind-dev \
     gnupg \
     binutils
 
