@@ -36,6 +36,8 @@ apk add --no-cache \
     supervisor \
     openssl-dev \
     zlib-dev \
+    libcurl \
+    curl-dev \
     protobuf-dev \
     python3 \
     doxygen \
@@ -92,10 +94,6 @@ if [ "$LINK" == "static" ]; then
       libpsl-static \
       libunwind-static \
       libunistring-static
-else
-  apk add --no-cache \
-      libcurl \
-      curl-dev
 fi
 
 #
