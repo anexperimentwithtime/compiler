@@ -13,22 +13,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-FROM alpine:latest
-
-ARG BOOST_VERSION="1.90.0"
-ARG BOOST_VARIANT="release"
-ARG LINK="static"
-
-ENV TZ="UTC" \
-    TERM=xterm-256color
-
-WORKDIR /srv
-
-COPY scripts/install_dependencies.sh install_dependencies.sh
-COPY scripts/install_boost.sh install_boost.sh
-
-COPY LICENSE .
-COPY toolchain-static.cmake .
-
-RUN sh install_dependencies.sh \
-    && sh install_boost.sh
+set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+set(BUILD_SHARED_LIBS OFF)
+set(CURL_USE_STATIC_LIBS ON)
+set(CMAKE_EXE_LINKER_FLAGS "-static")

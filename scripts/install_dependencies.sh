@@ -184,9 +184,7 @@ git checkout tags/0.12.2
 git submodule update --init --recursive
 mkdir build
 cd build
-export CMAKE_FIND_LIBRARY_SUFFIXES=".a"
-cmake .. $SENTRY_BUILD_ARGS -DSENTRY_BACKEND=crashpad -DSENTRY_BUILD_TESTS=OFF -DSENTRY_BUILD_EXAMPLES=OFF
-unset CMAKE_FIND_LIBRARY_SUFFIXES
+cmake .. -DCMAKE_TOOLCHAIN_FILE=../../toolchain-static.cmake $SENTRY_BUILD_ARGS -DSENTRY_BACKEND=crashpad -DSENTRY_BUILD_TESTS=OFF -DSENTRY_BUILD_EXAMPLES=OFF
 make -j4
 make install
 cd ../..
