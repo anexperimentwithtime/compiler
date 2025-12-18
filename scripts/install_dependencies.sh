@@ -184,7 +184,9 @@ git checkout tags/0.12.2
 git submodule update --init --recursive
 mkdir build
 cd build
+export CMAKE_FIND_LIBRARY_SUFFIXES=".a"
 cmake .. $SENTRY_BUILD_ARGS -DSENTRY_BACKEND=crashpad -DSENTRY_BUILD_TESTS=OFF -DSENTRY_BUILD_EXAMPLES=OFF
+unset CMAKE_FIND_LIBRARY_SUFFIXES
 make -j4
 make install
 cd ../..
@@ -209,9 +211,7 @@ cd fmt
 git checkout tags/12.1.0
 mkdir build
 cd build
-export CMAKE_FIND_LIBRARY_SUFFIXES=".a"
 cmake .. $FMT_BUILD_ARGS -DFMT_DOC=OFF -DFMT_TEST=OFF -DFMT_FUZZ=OFF -DFMT_CUDA_TEST=OFF
-unset CMAKE_FIND_LIBRARY_SUFFIXES
 make -j4
 make install
 cd ../..
