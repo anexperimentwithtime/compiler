@@ -1,3 +1,18 @@
+# Copyright (C) 2025 Ian Torres <iantorres@outlook.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+
 #!/bin/bash
 set -e
 set -o pipefail
@@ -175,4 +190,28 @@ make install
 cd ../..
 rm sentry -Rf
 
+if [ "$BOOST_VARIANT" == "release" ]; then
+  if [ "$LINK" == "static" ]; then
+    FMT_BUILD_ARGS="-DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF"
+  else
+    FMT_BUILD_ARGS="-DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON"
+  fi
+else
+  if [ "$LINK" == "static" ]; then
+    FMT_BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF"
+  else
+    FMT_BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=ON"
+  fi
+fi
+
+git clone https://github.com/fmtlib/fmt.git fmt
+cd fmt
+git checkout tags/12.1.0
+mkdir build
+cd build
+cmake .. $FMT_BUILD_ARGS -DFMT_DOC=OFF -DFMT_TEST=OFF -DFMT_FUZZ=OFF -DFMT_CUDA_TEST=OFF
+make -j4
+make install
+cd ../..
+rm fmt -Rf
 
