@@ -186,7 +186,11 @@ git checkout tags/0.12.2
 git submodule update --init --recursive
 mkdir build
 cd build
-cmake .. -DCMAKE_TOOLCHAIN_FILE=../../toolchain-static.cmake $SENTRY_BUILD_ARGS -DSENTRY_BACKEND=crashpad -DSENTRY_BUILD_TESTS=OFF -DSENTRY_BUILD_EXAMPLES=OFF
+if [ "$LINK" == "static" ]; then
+  cmake .. -DCMAKE_TOOLCHAIN_FILE=../../toolchain-static.cmake $SENTRY_BUILD_ARGS -DSENTRY_BACKEND=crashpad -DSENTRY_BUILD_TESTS=OFF -DSENTRY_BUILD_EXAMPLES=OFF
+else
+  cmake .. $SENTRY_BUILD_ARGS -DSENTRY_BACKEND=crashpad -DSENTRY_BUILD_TESTS=OFF -DSENTRY_BUILD_EXAMPLES=OFF
+fi
 make -j4
 make install
 cd ../..
